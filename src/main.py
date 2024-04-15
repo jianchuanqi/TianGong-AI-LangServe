@@ -6,7 +6,7 @@ from langserve import add_routes
 from starlette.middleware.sessions import SessionMiddleware
 
 from src.config.config import FASTAPI_BEARER_TOKEN, FASTAPI_MIDDLEWARE_SECRECT_KEY
-from src.models.models import AgentInput, AgentOutput, InputModelXata
+from src.models.models import AgentInput, AgentOutput, GraphInput, InputModelXata
 from src.routers import (
     search_academic_db_router,
     search_patent_db_router,
@@ -17,6 +17,7 @@ from src.services.lc.agents.openai_agent import openai_agent_runnable
 from src.services.lc.agents.zhipuai_agent import zhipuai_agent_runnable
 from src.services.lc.chains.openai_chain import openai_chain_runnable
 from src.services.lc.chains.zhipuai_chain import zhipuai_chain_runnable
+from src.services.lc.graphs.openai_gragh import openai_graph_runnable
 
 from src.services.lc.agents.lca_mapping import (
     flow_mapping_internet,
@@ -92,6 +93,13 @@ add_routes(
 
 add_routes(
     app,
+    openai_graph_runnable(),
+    path="/openai_graph",
+    input_type=GraphInput,
+)
+
+add_routes(
+    app,
     flow_mapping_internet(),
     path="/flow_mapping_internet",
     input_type=AgentInput,
@@ -137,4 +145,4 @@ app.mount("/oauth", oauth_app)
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=7778)

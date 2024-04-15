@@ -6,14 +6,14 @@
     "configurations": [
         {
             "name": "LangServe",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "uvicorn",
             "args": [
                 "src.main:app",
                 "--reload",
                 "--port",
-                "8080"
+                "7778"
             ],
             "jinja": true,
             "justMyCode": true,
