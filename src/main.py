@@ -6,7 +6,7 @@ from langserve import add_routes
 from starlette.middleware.sessions import SessionMiddleware
 
 from src.config.config import FASTAPI_BEARER_TOKEN, FASTAPI_MIDDLEWARE_SECRECT_KEY
-from src.models.models import AgentInput, AgentOutput
+from src.models.models import AgentInput, AgentOutput, InputModelXata
 from src.routers import (
     search_academic_db_router,
     search_patent_db_router,
@@ -17,6 +17,13 @@ from src.services.lc.agents.openai_agent import openai_agent_runnable
 from src.services.lc.agents.zhipuai_agent import zhipuai_agent_runnable
 from src.services.lc.chains.openai_chain import openai_chain_runnable
 from src.services.lc.chains.zhipuai_chain import zhipuai_chain_runnable
+
+from src.services.lc.agents.lca_mapping import (
+    flow_mapping_internet,
+    flow_mapping_cas_retrieving,
+    flow_mapping_cas,
+    flow_mapping_synonyms,
+)
 
 bearer_scheme = HTTPBearer()
 
@@ -79,6 +86,38 @@ add_routes(
     app,
     zhipuai_agent_runnable(),
     path="/zhipuai_agent",
+    input_type=AgentInput,
+    output_type=AgentOutput,
+)
+
+add_routes(
+    app,
+    flow_mapping_internet(),
+    path="/flow_mapping_internet",
+    input_type=AgentInput,
+    output_type=AgentOutput,
+)
+
+add_routes(
+    app,
+    flow_mapping_cas_retrieving(),
+    path="/flow_mapping_cas_retrieving",
+    input_type=AgentInput,
+    output_type=AgentOutput,
+)
+
+add_routes(
+    app,
+    flow_mapping_cas(),
+    path="/flow_mapping_cas",
+    input_type=InputModelXata,
+    output_type=AgentOutput,
+)
+
+add_routes(
+    app,
+    flow_mapping_synonyms(),
+    path="/flow_mapping_synonyms",
     input_type=AgentInput,
     output_type=AgentOutput,
 )

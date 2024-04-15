@@ -7,6 +7,9 @@ from pydantic import BaseModel
 class AgentInput(LangchainBaseModel):
     input: str
 
+class InputModelXata(BaseModel):
+    cas: str
+    category: str
 
 class AgentOutput(LangchainBaseModel):
     output: str
