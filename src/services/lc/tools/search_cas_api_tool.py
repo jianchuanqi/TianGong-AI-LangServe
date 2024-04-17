@@ -12,7 +12,7 @@ import json
 
 
 class SearchCASApi(BaseTool):
-    name = "http_request_tool"
+    name = "search_cas_api"
     description = "Retrieve data via RESTful API with HTTP Request GET."
 
     class InputSchema(BaseModel):

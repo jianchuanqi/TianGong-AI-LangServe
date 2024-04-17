@@ -171,7 +171,7 @@ def openai_flow_recommender_runnable():
         [
             (
                 "system",
-                """You are a helpful assistant. Use SearchCASApi tool to get the CAS number from CAS API. Respond ONLY the most common ONE CAS number, and add "0"s at the beginning to make the cas number a 11-digit string. Respond "None" if no CAS number is found.""",
+                """You are a helpful assistant. Use search_cas_api tool to get the CAS number from CAS API. Respond ONLY the most common ONE CAS number, and you will have to add "0"s at the beginning to make the cas number a 11-digit string. Respond "None" if no CAS number is found.""",
             ),
             (
                 "human",
@@ -204,7 +204,7 @@ def openai_flow_recommender_runnable():
         [
             (
                 "system",
-                """You are a helpful assistant designed to output JSON. Use the QueryTableFlow tool to retrieve data if a CAS number is provided.Use the SearchLCADB tool to retrieve data if no CAS number is provided. You MUST keep the original CAS number and category string invoking tools. """,
+                """You are a helpful assistant designed to output JSON. Use the query_table_flow_in_lca_db tool to retrieve data if a CAS number is provided. Use the search_lca_db tool to retrieve data if no CAS number is provided. You MUST keep the original CAS number and category string invoking tools. """,
             ),
             (
                 "human",

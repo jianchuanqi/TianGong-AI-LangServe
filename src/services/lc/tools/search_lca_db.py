@@ -20,7 +20,7 @@ xata_branch = "main"
 
 
 class SearchLCADB(BaseTool):
-    name = "search_lca_tool"
+    name = "search_lca_db"
     description = "Use original query to search in the Life Cycle Assessment Database."
 
     class InputSchema(BaseModel):
@@ -171,7 +171,7 @@ class SearchXataAsk(BaseTool):
 
 
 class QueryTableFlow(BaseTool):
-    name = "query_lcadb_flow_table"
+    name = "query_table_flow_in_lca_db"
     description = "Use original query to search in the Life Cycle Assessment Database."
 
     class InputSchema(BaseModel):
