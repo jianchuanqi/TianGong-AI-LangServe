@@ -19,6 +19,7 @@ from src.services.lc.tools.search_lca_db import (
     SearchLCADB,
     SearchXataFilterClassification,
     SearchXataAsk,
+    QueryTableFlow,
 )
 from src.services.lc.tools.http_get_cas import HttpRequestGet
 from src.config.config import (
@@ -28,6 +29,7 @@ from src.config.config import (
     XATA_MEMORY_DB_URL,
     XATA_MEMORY_TABLE_NAME,
 )
+
 
 def init_chat_history(session_id: str) -> BaseChatMessageHistory:
     return XataChatMessageHistory(
@@ -196,6 +198,53 @@ def flow_mapping_synonyms():
     agent = (
         {
             "input": lambda x: x["input"].encode("utf-8").decode("unicode_escape"),
+            "agent_scratchpad": lambda x: format_to_openai_tool_messages(
+                x["intermediate_steps"]
+            ),
+        }
+        | prompt
+        | llm.bind(tools=oai_tools)
+        | OpenAIToolsAgentOutputParser()
+    )
+
+    agent_executor = AgentExecutor(
+        agent=agent, tools=lc_tools, verbose=True, handle_parsing_errors=True
+    )
+
+    return agent_executor
+
+
+def flow_query():
+    lc_tools = [QueryTableFlow(), SearchLCADB()]
+    oai_tools = [format_tool_to_openai_tool(tool) for tool in lc_tools]
+
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            (
+                "system",
+                """You are a helpful assistant designed to output JSON. Use the QueryTableFlow tool to retrieve data if a CAS number is provided.Use the SearchLCADB tool to retrieve data if no CAS number is provided. You MUST keep the original CAS number and category string invoking tools. """,
+            ),
+            (
+                "human",
+                """Search in the Life Cycle Assessment Database and return "base_name", "elementary_flow_categorization", "cas_number", and "uuid" of top 5 records with the highest score. The CAS number is {cas}. The category is <{category}>. The synonyms are {synonyms}. Do not give any extra information, just the requested fields in the JSON format.""",
+            ),
+            MessagesPlaceholder(variable_name="agent_scratchpad"),
+        ]
+    )
+
+    llm = ChatOpenAI(
+        api_key=OPENAI_API_KEY,
+        temperature=0,
+        model=OPENAI_MODEL,
+    )
+
+    agent = (
+        {
+            "cas": lambda x: x["cas"].encode("utf-8").decode("unicode_escape"),
+            "synonyms": lambda x: x["synonyms"].encode("utf-8").decode("unicode_escape"),
+            "category": lambda x: x["category"]
+            .encode("utf-8")
+            .decode("unicode_escape"),
             "agent_scratchpad": lambda x: format_to_openai_tool_messages(
                 x["intermediate_steps"]
             ),

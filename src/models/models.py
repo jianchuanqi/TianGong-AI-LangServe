@@ -8,8 +8,9 @@ from pydantic import BaseModel
 class AgentInput(LangchainBaseModel):
     input: str
 
-class InputModelXata(BaseModel):
+class SearchFlowInput(LangchainBaseModel):
     cas: str
+    synonyms: str
     category: str
 
 class AgentOutput(LangchainBaseModel):

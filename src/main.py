@@ -6,7 +6,7 @@ from langserve import add_routes
 from starlette.middleware.sessions import SessionMiddleware
 
 from src.config.config import FASTAPI_BEARER_TOKEN, FASTAPI_MIDDLEWARE_SECRECT_KEY
-from src.models.models import AgentInput, AgentOutput, GraphInput, InputModelXata
+from src.models.models import AgentInput, AgentOutput, GraphInput, SearchFlowInput
 from src.routers import (
     search_academic_db_router,
     search_patent_db_router,
@@ -24,6 +24,7 @@ from src.services.lc.agents.lca_mapping import (
     flow_mapping_cas_retrieving,
     flow_mapping_cas,
     flow_mapping_synonyms,
+    flow_query,
 )
 
 bearer_scheme = HTTPBearer()
@@ -116,17 +117,17 @@ add_routes(
 
 add_routes(
     app,
-    flow_mapping_cas(),
-    path="/flow_mapping_cas",
-    input_type=InputModelXata,
+    flow_mapping_synonyms(),
+    path="/flow_mapping_synonyms",
+    input_type=AgentInput,
     output_type=AgentOutput,
 )
 
 add_routes(
     app,
-    flow_mapping_synonyms(),
-    path="/flow_mapping_synonyms",
-    input_type=AgentInput,
+    flow_query(),
+    path="/flow_query",
+    input_type=SearchFlowInput,
     output_type=AgentOutput,
 )
 
