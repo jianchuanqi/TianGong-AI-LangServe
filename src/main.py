@@ -10,7 +10,7 @@ from src.config.config import (
     FASTAPI_BEARER_TOKEN,
     FASTAPI_MIDDLEWARE_SECRECT_KEY,
 )
-from src.models.models import AgentInput, AgentOutput, GraphInput
+from src.models.models import AgentInput, AgentOutput, GraphInput, SearchFlowInput
 from src.routers import (
     search_academic_db_router,
     search_patent_db_router,
@@ -24,12 +24,8 @@ from src.services.lc.chains.openai_chain import openai_chain_runnable
 from src.services.lc.chains.zhipuai_chain import zhipuai_chain_runnable
 from src.services.lc.graphs.openai_gragh import openai_graph_runnable
 
-from src.services.lc.agents.lca_mapping import (
-    flow_mapping_internet,
-    flow_mapping_cas_retrieving,
-    flow_mapping_cas,
-    flow_mapping_synonyms,
-    flow_query,
+from src.services.lc.agents.lca.openai_flow_recommender_runnable import (
+    openai_flow_recommender_runnable,
 )
 
 bearer_scheme = HTTPBearer()
@@ -107,33 +103,9 @@ add_routes(
 
 add_routes(
     app,
-    flow_mapping_internet(),
-    path="/flow_mapping_internet",
+    openai_flow_recommender_runnable(),
+    path="/runnable_test",
     input_type=AgentInput,
-    output_type=AgentOutput,
-)
-
-add_routes(
-    app,
-    flow_mapping_cas_retrieving(),
-    path="/flow_mapping_cas_retrieving",
-    input_type=AgentInput,
-    output_type=AgentOutput,
-)
-
-add_routes(
-    app,
-    flow_mapping_synonyms(),
-    path="/flow_mapping_synonyms",
-    input_type=AgentInput,
-    output_type=AgentOutput,
-)
-
-add_routes(
-    app,
-    flow_query(),
-    path="/flow_query",
-    input_type=SearchFlowInput,
     output_type=AgentOutput,
 )
 

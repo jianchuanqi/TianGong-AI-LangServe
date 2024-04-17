@@ -21,7 +21,7 @@ from src.services.lc.tools.search_lca_db import (
     SearchXataAsk,
     QueryTableFlow,
 )
-from src.services.lc.tools.http_get_cas import HttpRequestGet
+from src.services.lc.tools.search_cas_api_tool import SearchCASApi
 from src.config.config import (
     OPENAI_API_KEY,
     OPENAI_MODEL,
@@ -83,7 +83,7 @@ def flow_mapping_internet():
 
 def flow_mapping_cas_retrieving():
     # lc_tools = [SearchInternet(), SearchVectorDB(), SearchLCADB(), SearchESG()]
-    lc_tools = [HttpRequestGet()]
+    lc_tools = [SearchCASApi()]
     oai_tools = [format_tool_to_openai_tool(tool) for tool in lc_tools]
 
     prompt = ChatPromptTemplate.from_messages(

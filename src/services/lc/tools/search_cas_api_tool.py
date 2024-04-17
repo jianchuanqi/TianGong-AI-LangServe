@@ -11,7 +11,7 @@ from langchain.utilities import TextRequestsWrapper
 import json
 
 
-class HttpRequestGet(BaseTool):
+class SearchCASApi(BaseTool):
     name = "http_request_tool"
     description = "Retrieve data via RESTful API with HTTP Request GET."
 
