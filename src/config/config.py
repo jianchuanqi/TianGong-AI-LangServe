@@ -2,7 +2,7 @@ import os
 
 import toml
 
-config = toml.load("secrets.toml")
+config = toml.load(".secrects/secrets.toml")
 
 OPENAI_API_KEY = config["OPENAI"]["API_KEY"]
 OPENAI_MODEL = config["OPENAI"]["MODEL"]
@@ -17,6 +17,7 @@ PINECONE_INDEX_NAME = config["PINECONE"]["INDEX_NAME"]
 PINECONE_NAMESPACE_SCI = config["PINECONE"]["NAMESPACE_SCI"]
 PINECONE_NAMESPACE_PATENT = config["PINECONE"]["NAMESPACE_PATENT"]
 PINECONE_NAMESPACE_ESG = config["PINECONE"]["NAMESPACE_ESG"]
+PINECONE_NAMESPACE_STANDARD = config["PINECONE"]["NAMESPACE_STANDARD"]
 
 XATA_API_KEY = config["XATA"]["API_KEY"]
 XATA_MEMORY_TABLE_NAME = config["XATA"]["MEMORY_TABLE_NAME"]
